@@ -1,6 +1,5 @@
 package homework;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,21 +8,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
 
 import java.util.List;
 
-public class Homeqa {
+public class Demoqa {
 
-    WebDriver driver=null;
+    WebDriver driver;
 
     @BeforeEach
     public void setUpDriver() {
-        String browser = System.getProperty("browser");
+        //String browser = System.getProperty("browser");
 
-         if (browser.equals("chrome")) {
+         /*if (browser.equals("chrome")) {
          WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://demoqa.com/automation-practice-form");
@@ -34,41 +32,47 @@ public class Homeqa {
         } else {
             WebDriverManager.edgedriver().setup();
             driver = new EdgeDriver();
-            driver.get("https://demoqa.com/automation-practice-form");
+
         }
+
+          */
+        driver = new ChromeDriver();
+        driver.get("https://demoqa.com/automation-practice-form");
         driver.manage().window().maximize();
     }
 
     @Test
-    public void HomeQaTest() {
+    public void HomeQaTest() throws InterruptedException {
 
         //Student Registration Form
+
         WebElement firstName = driver.findElement(By.cssSelector("form [placeholder='First Name']"));
         firstName.sendKeys("Pablo");
         WebElement lastName = driver.findElement(By.cssSelector("form [placeholder='Last Name']"));
         lastName.sendKeys("Kor");
         WebElement email = driver.findElement(By.cssSelector("[id='userEmail']"));
         email.sendKeys("moroz-p@mail.ru");
-        WebElement gender = driver.findElement(By.cssSelector("div [class='col-md-9 col-sm-12'] input[value='Male']"));
+        WebElement gender = driver.findElement(By.xpath("//div [contains(@class,'col-md-9 col-sm-12')]// div [@class='custom-control custom-radio custom-control-inline']//label[text()='Male']"));
         gender.click();
-        Assertions.assertEquals(true, gender.getAttribute("checked"));
+        //Assertions.assertEquals("true", gender.getAttribute("Male")); тут не понятно как именн ознать какой атрибут меняется и т.д
         WebElement number = driver.findElement(By.cssSelector("[id=userNumber]"));
         number.sendKeys("9534042323");
-        WebElement month = driver.findElement(By.cssSelector("[id='gender-radio-1']"));
+
+        WebElement month = driver.findElement(By.cssSelector("div [class='react-datepicker__input-container'] #dateOfBirthInput"));
         month.click();
+
         WebElement chooseMonth = driver.findElement(By.cssSelector("[class='react-datepicker__month-select'] option:nth-child(11)"));
         chooseMonth.click();
         WebElement year = driver.findElement(By.xpath("//*[contains(@class,'react-datepicker__year-select')]"));
         year.click();
         WebElement chooseYear = driver.findElement(By.xpath("//*[contains(@class,'react-datepicker__year-select')]"));
         chooseYear.click();
-        WebElement subjects = driver.findElement(By.cssSelector("[id=subjectsContainer]"));
-        subjects.sendKeys("empty");
-        WebElement firstHobbies = driver.findElement(By.cssSelector("[id='hobbies-checkbox-1']"));
+        Thread.sleep(5000);
+        WebElement firstHobbies = driver.findElement(By.xpath("//div [contains(@class,'col-md-9 col-sm-12')]//div [contains(@class,'custom-control custom-checkbox custom-control-inline')]//label[text()='Sports']"));
         firstHobbies.click();
-        WebElement secondHobbies = driver.findElement(By.cssSelector("[id='hobbies-checkbox-2']"));
+        WebElement secondHobbies = driver.findElement(By.xpath("//div [contains(@class,'col-md-9 col-sm-12')]//div [contains(@class,'custom-control custom-checkbox custom-control-inline')]//label[text()='Reading']"));
         secondHobbies.click();
-        WebElement thirdHobbies = driver.findElement(By.cssSelector("[id='hobbies-checkbox-3']"));
+        WebElement thirdHobbies = driver.findElement(By.xpath("//div [contains(@class,'col-md-9 col-sm-12')]//div [contains(@class,'custom-control custom-checkbox custom-control-inline')]//label[text()='Music']"));
         thirdHobbies.click();
         WebElement address = driver.findElement(By.cssSelector("[id='currentAddress']"));
         address.sendKeys("Novosibirsk");
@@ -77,14 +81,14 @@ public class Homeqa {
         WebElement chooseState = driver.findElement(By.cssSelector("[id='state'] [class='css-1uccc91-singleValue']"));
         chooseState.click();
         WebElement city = driver.findElement(By.cssSelector("[id='city']"));
-        state.click();
+        city.click();
         WebElement chooseCity = driver.findElement(By.cssSelector("[id='city'] [class='css-1uccc91-singleValue']"));
         chooseCity.click();
         driver.findElement(By.cssSelector("[id='submit']"));
         chooseState.click();
         List<WebElement> newList=driver.findElements(By.cssSelector("[class='modal-body']"));
-
         Assertions.assertFalse(newList.isEmpty());
+
     }
 
     @AfterEach

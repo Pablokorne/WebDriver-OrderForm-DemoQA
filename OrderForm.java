@@ -1,6 +1,6 @@
 package homework;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,19 +9,19 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.List;
 
-public class TextError {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class OrderForm {
     WebDriver driver;
 
     @BeforeEach
     public void setUpDriver() {
         String browser = System.getProperty("browser");
 
-        if (browser.equals("chrome")) {
+       /* if (browser.equals("chrome")) {
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
             driver.get("https://formdesigner.ru/examples/order.html");
@@ -33,7 +33,7 @@ public class TextError {
             WebDriverManager.edgedriver().setup();
             driver = new EdgeDriver();
             driver.get("https://formdesigner.ru/examples/order.html");
-        }
+        }*/
         driver = new ChromeDriver();
         driver.get("https://formdesigner.ru/examples/order.html");
         driver.manage().window().maximize();
@@ -49,7 +49,11 @@ public class TextError {
         driver.switchTo().frame(iframe);
         WebElement submit = driver.findElement(By.cssSelector("div [class='shift btn'] [type='submit']"));
         submit.click();
-        List<WebElement> error = driver.findElements(By.cssSelector("form [class='errorSummary errorSummary_top'] ul"));
-        // какой асерт написать? IDE постоянно ругается...
+        List<WebElement> error = driver.findElements(By.cssSelector("form [class='errorSummary errorSummary_top'] ul:first-child"));
+       Assertions.assertEquals ("Необходимо заполнить поле ФИО:.",error); // что я упускаю?)
+    }
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
     }
 }
